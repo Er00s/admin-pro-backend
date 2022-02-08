@@ -1,6 +1,7 @@
 
 require('dotenv').config();
 
+
 const express = require('express');
 const cors = require('cors');
 
@@ -11,6 +12,9 @@ const app = express();
 
 //config cors
 app.use(cors())
+
+//lectura y parseo del body
+app.use( express.json() );
 
 // BASE DE DATOS
 dbConnection();
@@ -23,14 +27,8 @@ dbConnection();
 //funcion que se dispara cuando llaman a la raiz de nuestro proyecto en el navegador
 // REQUEST: DATA DEL CLIENTE
 // RESPONSE: LO QUE LE DA EL SERVIDOR
-app.get( '/', (request, response) => {
-
-    response.json({
-        ok:true,
-        msg: 'Bienvenido al server'
-    });
-
-} );
+app.use( '/api/usuarios', require('./routes/usuarios-routes') );
+app.use( '/api/login', require('./routes/auth') );
 
 //PUERTO DE START
 app.listen(process.env.PORT, ()=>{
