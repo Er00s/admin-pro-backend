@@ -23,7 +23,6 @@ router.post(
   "/",
   //arreglo de middlewares (funciones que se ejecutan antes de llegar a mi funcion)
   [
-    validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("password", "La contraseña es obligatoria").not().isEmpty(),
     check("email", "El email es obligatorio").isEmail(),

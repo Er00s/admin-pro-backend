@@ -2,18 +2,36 @@ const { response } = require("express");
 const bcrypt = require("bcryptjs");
 
 const Usuario = require("../models/usuario-model");
-const res = require("express/lib/response");
 const { generateJWT } = require("../helpers/jwt");
 
 //CONSULTAR USUARIOS
 const getUsuarios = async (request, response) => {
-  // entre comillas simples son las propieades que se ven de el usuario
-  const usuarios = await Usuario.find({}, "nombre email role google");
+
+  //si no recibo un numero en la peticion voy a dar un 0 
+  //http://localhost:3000/api/usuarios?desde=10
+  const desde = Number(request.query.desde) || 0;
+  const limit = (desde + 5);
+
+  //coleccion de promesas para no disparar dos awaits simultaneos y no realentizar la aplicacion de manera innecesaria 
+  //desestructuramos en un arreglo las promesas 
+ const [usuarios, total ] = await Promise.all([
+    // entre comillas simples son las propieades que se ven de el usuario
+    Usuario  
+        .find({}, "nombre email role google img")
+        // saltaria los resultados desde el numero del desde en caso de ser 0 muestra los primeros 5 
+        .skip(desde)
+        .limit( limit ),
+    //estas dos promesas separadas por la coma tienen un await heredado del promise.all
+    Usuario.countDocuments()
+
+  ])
+
 
   response.json({
     ok: true,
-    usuarios,
-    uid: request.uid
+    mostrando: desde + ' hasta ' + (desde + limit - 1),
+    total,
+    usuarios
   });
 };
 

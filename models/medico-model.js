@@ -14,11 +14,11 @@ const MedicosSchema = Schema({
         ref: 'Usuario',        
         required: true
     },
-    hospital: [{
+    hospital: {
         type: Schema.Types.ObjectId,
         ref: 'Hospital',
         required: true
-    }]
+    }
     //NAME PARA LA COLECCTION DE LA BASE 
 }, {collection: 'medicos'} );
 
