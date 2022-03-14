@@ -39,13 +39,19 @@ router.post(
 );
 
 // EDITAR MEDICO
-router.put(
-  "/:id",
-  [  ],
+router.put(  "/:id",
+  [ 
+    validarJWT,
+    check('nombre','el nombre del medico es necesario').not().isEmpty(),
+    check('hospital','el id del hospital debe ser valido').isMongoId(),   
+    validarCampos
+   ],
   updateMedico
 );
 
 // BORRAR MEDICO
-router.delete("/:id", [], deleteMedico);
+router.delete("/:id", [
+  validarJWT
+], deleteMedico);
 
 module.exports = router;

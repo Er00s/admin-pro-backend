@@ -33,13 +33,19 @@ router.post(
 );
 
 // EDITAR HOSPITAL
-router.put(
-  "/:id",
-  [  ],
+router.put("/:id",
+  [ 
+    validarJWT,
+    check('nombre','el nombre del hospital es necesario').not().isEmpty(),
+    validarCampos 
+  ],
   updateHospital
 );
 
 // BORRAR HOSPITAL
-router.delete("/:id", [], deleteHospital);
+router.delete("/:id", [
+  validarJWT,
+], 
+deleteHospital);
 
 module.exports = router;
